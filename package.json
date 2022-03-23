@@ -8,7 +8,7 @@
     "server": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Saad Jamil",
   "license": "ISC",
   "dependencies": {
     "colors": "^1.4.0",
