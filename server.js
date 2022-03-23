@@ -9,16 +9,17 @@ const ordersRoutes = require('./api/routes/orderRoutes');
 const errorHandler = require('./api/middleware/errorHandler');
 const connectToDb = require('./api/config/db')
 const cors = require('./api/middleware/corsMiddleware')
+
 // connect to mongo
-// connectToDb();
+connectToDb();
 
 
 
 // Middlewares
 app.use(cors);
 app.use(morgan('dev'));
-app.use(express.urlencoded({extended: false}));
 app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 
 // Routes
 app.use('/products', productRoutes);
