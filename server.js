@@ -8,11 +8,14 @@ const productRoutes = require('./api/routes/productRoutes');
 const ordersRoutes = require('./api/routes/orderRoutes');
 const errorHandler = require('./api/middleware/errorHandler');
 const connectToDb = require('./api/config/db')
-
+const cors = require('./api/middleware/corsMiddleware')
 // connect to mongo
 // connectToDb();
 
+
+
 // Middlewares
+app.use(cors);
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
