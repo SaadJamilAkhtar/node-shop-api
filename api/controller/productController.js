@@ -14,7 +14,6 @@ const getProducts = asyncHandler(async (req, res) => {
 // @route   POST /products
 // @access  Private
 const addProduct = asyncHandler(async (req, res) => {
-    console.log(req.body)
     if (!req.body.name) {
         res.status(400);
         throw new Error('Please add Product name');
