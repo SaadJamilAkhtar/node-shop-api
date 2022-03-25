@@ -33,7 +33,12 @@ const addProduct = asyncHandler(async (req, res) => {
         throw new Error('Please add Product price');
     }
     const product = await Product.create({name: req.body.name, price: req.body.price});
-    res.status(201).json(product);
+    res.status(201).json({
+        id: product._id,
+        name: product.name,
+        price: product.price,
+        url : req.protocol+"://"+req.headers.host + "/products/" + product._id
+    });
 })
 
 
