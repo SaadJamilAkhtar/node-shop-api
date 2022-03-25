@@ -4,10 +4,19 @@ const Product = require('../models/productModel');
 // @route   GET /products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find();
-    res.status(200).json({
-        products
-    });
+    const products = await Product.find().select('_id name price');
+    const response = {
+        count : products.length,
+        products : products.map(product => {
+            return {
+                id: product._id,
+                name: product.name,
+                price: product.price,
+                url : req.protocol+"://"+req.headers.host + "/products/" + product._id
+            }
+        })
+    }
+    res.status(200).json(response);
 })
 
 // @desc    Add Products
