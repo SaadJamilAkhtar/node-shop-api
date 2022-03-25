@@ -23,7 +23,7 @@ const addProduct = asyncHandler(async (req, res) => {
         throw new Error('Please add Product price');
     }
     const product = await Product.create({name: req.body.name, price: req.body.price});
-    res.status(200).json(product);
+    res.status(201).json(product);
 })
 
 
@@ -34,7 +34,7 @@ const getProductById = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
 
     if (!product) {
-        res.status(400);
+        res.status(404);
         throw new Error("Product not found");
     }
     res.status(200);
@@ -53,26 +53,50 @@ const updateProduct = asyncHandler(async (req, res) => {
     }
 
     // check if user exists
-    if(!req.user){
-        res.status(401);
-        throw new Error('User not found')
-    }
+    // if(!req.user){
+    //     res.status(401);
+    //     throw new Error('User not found')
+    // }
     // goal belongs to logged in user
-    if(goal.user.toString() !== req.user.id){
-        res.status(401);
-        throw new Error('User Not Authorized')
-    }
-    const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {
+    // if(goal.user.toString() !== req.user.id){
+    //     res.status(401);
+    //     throw new Error('User Not Authorized')
+    // }
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
+        $set : {
+            name: req.body.name || product.name,
+            price: req.body.price || product.price
+        }
+    }, {
         new: true
     });
-    res.status(200).json(updatedGoal)
+    res.status(200).json(updatedProduct)
 })
 
 // @desc    Delete Particular Product
 // @route   DELETE /products/id
 // @access  Private
 const deleteProduct = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
 
+    if (!product) {
+        res.status(404);
+        throw new Error("Product not found");
+    }
+
+    // check if user exists
+    // if(!req.user){
+    //     res.status(401);
+    //     throw new Error('User not found')
+    // }
+    // // goal belongs to logged in user
+    // if(goal.user.toString() !== req.user.id){
+    //     res.status(401);
+    //     throw new Error('User Not Authorized')
+    // }
+
+    await product.remove();
+    res.status(200).json({id: req.params.id});
 })
 
 module.exports = {getProducts, getProductById, addProduct, deleteProduct, updateProduct}
