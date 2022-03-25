@@ -5,6 +5,7 @@ const Product = require('../models/productModel');
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
     const products = await Product.find().select('_id name price');
+    // response object
     const response = {
         count : products.length,
         products : products.map(product => {
