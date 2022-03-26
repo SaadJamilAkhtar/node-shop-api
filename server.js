@@ -9,7 +9,7 @@ const ordersRoutes = require('./api/routes/orderRoutes');
 const errorHandler = require('./api/middleware/errorHandler');
 const connectToDb = require('./api/config/db')
 const cors = require('./api/middleware/corsMiddleware')
-
+const userRoutes = require('./api/routes/userRoutes');
 // connect to mongo
 connectToDb();
 
@@ -25,6 +25,7 @@ app.use(express.urlencoded({extended: false}));
 // Routes
 app.use('/products', productRoutes);
 app.use('/orders', ordersRoutes);
+app.use('/users', userRoutes);
 
 // Error handler
 app.use(errorHandler);
