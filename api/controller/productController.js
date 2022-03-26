@@ -5,7 +5,7 @@ const Product = require('../models/productModel');
 // @route   GET /products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find().select('_id name price');
+    const products = await Product.find().select('_id name price img');
     // response object
     const response = {
         count : products.length,
@@ -14,6 +14,7 @@ const getProducts = asyncHandler(async (req, res) => {
                 id: product._id,
                 name: product.name,
                 price: product.price,
+                img: product.img,
                 url : req.protocol+"://"+req.headers.host + "/products/" + product._id
             }
         })
@@ -34,11 +35,12 @@ const addProduct = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('Please add Product price');
     }
-    const product = await Product.create({name: req.body.name, price: req.body.price});
+    const product = await Product.create({name: req.body.name, price: req.body.price, img:req.file.path || ""});
     res.status(201).json({
         id: product._id,
         name: product.name,
         price: product.price,
+        img: product.img,
         url : req.protocol+"://"+req.headers.host + "/products/" + product._id
     });
 })
@@ -48,7 +50,7 @@ const addProduct = asyncHandler(async (req, res) => {
 // @route   GET /products/id
 // @access  Public
 const getProductById = asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id).select("_id name price");
+    const product = await Product.findById(req.params.id).select("_id name price img");
 
     if (!product) {
         res.status(404);

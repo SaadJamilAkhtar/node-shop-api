@@ -8,6 +8,10 @@ const Product = mongoose.Schema({
     price: {
         type: Number,
         default: 0
+    },
+    img:{
+        type: String,
+        required: false
     }
 
 }, {timestamps:true});
