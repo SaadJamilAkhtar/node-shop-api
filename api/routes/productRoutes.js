@@ -35,7 +35,7 @@ router.post("/", upload.single('img'), productController.addProduct);
 
 router.get("/:id", productController.getProductById);
 
-router.patch("/:id", productController.updateProduct);
+router.patch("/:id", upload.single('img'),productController.updateProduct);
 
 router.delete("/:id", productController.deleteProduct);
 

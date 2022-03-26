@@ -8,14 +8,14 @@ const getProducts = asyncHandler(async (req, res) => {
     const products = await Product.find().select('_id name price img');
     // response object
     const response = {
-        count : products.length,
-        products : products.map(product => {
+        count: products.length,
+        products: products.map(product => {
             return {
                 id: product._id,
                 name: product.name,
                 price: product.price,
                 img: product.img,
-                url : req.protocol+"://"+req.headers.host + "/products/" + product._id
+                url: req.protocol + "://" + req.headers.host + "/products/" + product._id
             }
         })
     }
@@ -35,13 +35,17 @@ const addProduct = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('Please add Product price');
     }
-    const product = await Product.create({name: req.body.name, price: req.body.price, img:req.file.path || ""});
+    const product = await Product.create({
+        name: req.body.name,
+        price: req.body.price,
+        img: req.file ? req.protocol + "://" + req.headers.host + "/" + req.file.path : ""
+    });
     res.status(201).json({
         id: product._id,
         name: product.name,
         price: product.price,
         img: product.img,
-        url : req.protocol+"://"+req.headers.host + "/products/" + product._id
+        url: req.protocol + "://" + req.headers.host + "/products/" + product._id
     });
 })
 
@@ -82,9 +86,10 @@ const updateProduct = asyncHandler(async (req, res) => {
     //     throw new Error('User Not Authorized')
     // }
     const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
-        $set : {
+        $set: {
             name: req.body.name || product.name,
-            price: req.body.price || product.price
+            price: req.body.price || product.price,
+            img: req.file ? req.protocol + "://" + req.headers.host + "/" + req.file.path : (product.img || "")
         }
     }, {
         new: true
