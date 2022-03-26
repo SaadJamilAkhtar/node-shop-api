@@ -31,6 +31,7 @@ const addOrder = asyncHandler(async (req, res) => {
     }
     const product = await Product.findById(req.body.product);
     if (!product) {
+        res.status(404);
         throw new Error('Product not found!');
     }
     const order = await Order.create({
@@ -62,7 +63,7 @@ const getOrderById = asyncHandler(async (req, res) => {
     }
     const order = await Order.findById(req.params.id);
     if(!order){
-        res.status(400);
+        res.status(404);
         throw new Error('Order not found');
     }
     const product = await Product.findById(order.product);
@@ -86,7 +87,7 @@ const deleteOrder = asyncHandler(async (req, res) => {
     }
     const order = await Order.findById(req.params.id);
     if(!order){
-        res.status(400);
+        res.status(404);
         throw new Error('Order not found');
     }
     await order.delete();
