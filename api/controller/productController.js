@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const Product = require('../models/productModel');
+
 // @desc    Get Products
 // @route   GET /products
 // @access  Public
@@ -24,6 +25,7 @@ const getProducts = asyncHandler(async (req, res) => {
 // @route   POST /products
 // @access  Private
 const addProduct = asyncHandler(async (req, res) => {
+
     if (!req.body.name) {
         res.status(400);
         throw new Error('Please add Product name');
