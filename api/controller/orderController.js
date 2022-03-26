@@ -5,7 +5,7 @@ const Product = require('../models/productModel')
 // @route   GET /orders
 // @access  Public
 const getOrders = asyncHandler(async (req, res) => {
-    const orders = await Order.find().select('_id product quantity');
+    const orders = await Order.find().select('_id product quantity').populate('product', "_id name price");
     // response object
     const response = {
         count: orders.length,
@@ -61,16 +61,15 @@ const getOrderById = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("No Id was provided");
     }
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate('product', "_id name price");
     if(!order){
         res.status(404);
         throw new Error('Order not found');
     }
-    const product = await Product.findById(order.product);
     res.status(201).json({
         id: order._id,
         product: order.product,
-        productUrl: req.protocol + "://" + req.headers.host + "/products/" + product._id,
+        productUrl: req.protocol + "://" + req.headers.host + "/products/" + order.product._id,
         quantity: order.quantity
 
     });
